@@ -5,6 +5,7 @@
 #ifndef TCPSOCKET_CLIENT_H
 #define TCPSOCKET_CLIENT_H
 
+#include <mem.h>
 #include "headerFiles.h"
 
 int main(int argc, char** argv);

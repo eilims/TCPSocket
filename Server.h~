@@ -5,6 +5,7 @@
 #ifndef TCPSOCKET_SERVER_H
 #define TCPSOCKET_SERVER_H
 
+#include <mem.h>
 #include "headerFiles.h"
 
 int main();

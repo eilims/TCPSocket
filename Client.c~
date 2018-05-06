@@ -19,7 +19,7 @@ int main(int argc, char** argv){
     int clientAddressLength;
 
     serverName = argv[1];
-    data = argv[2];
+    data = argv[2]
 
     memset(&serverAddr, 0, sizeof(serverAddr));
     serverAddr.sin_family = AF_INET;
