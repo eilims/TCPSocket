@@ -62,7 +62,7 @@ int main(){
         for(i = 0; i < sizeof(buffer) - maxBytesToRead; i++){
             printf("Index: %d Data: %c\n", i, buffer[i]);
         }
-
+        printf("\n");
         close(socketDescriptorReference);
     }
 
