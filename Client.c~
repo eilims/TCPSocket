@@ -44,13 +44,23 @@ int main(int argc, char** argv){
 	
 	if(data[0] != '0')
 	  {
-	     send(socketDescriptorReference, data, strlen(data), 0);
-	     close(socketDescriptorReference);
+	     if(send(socketDescriptorReference, data, strlen(data) - 1, 0) < 0) printf("Error Sending\n");
+	     
+	     bytesReceived = recv(socketDescriptorReference, bufferPointer, maxBytesToRead, 0);
+//	     while(bytesReceived > 0)
+//	       {
+//		  bufferPointer += bytesReceived;
+//		  maxBytesToRead -= bytesReceived;
+//		  bytesReceived = recv(socketDescriptorReference, bufferPointer, maxBytesToRead, 0);
+//	       }
+	     printf("Data Accepted. Number of Bytes Received: %d\n", buffer[0]);     
 	  }
 	else 
 	  {
-	   control = 0;  
+	     control = 0;  
 	  }
+	close(socketDescriptorReference);
+	 
 	
      }
    

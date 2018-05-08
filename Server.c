@@ -7,9 +7,11 @@
 int main(){
 
     int i;
+    int control;
     int socketDescriptor;
     int socketDescriptorReference;
     char buffer[256];
+    char data[1];
     char* bufferPointer = buffer;
     int bytesToRead = 0;
     int maxBytesToRead = sizeof(buffer);
@@ -17,7 +19,7 @@ int main(){
     int maxWaitingClients = 4;
     struct sockaddr_in serverAddr;
     struct sockaddr_in clientAddr;
-    int clientAddressLength;
+    int clientAddressLength = sizeof(clientAddr);
 
     //Creating local socket address for server
     memset(&serverAddr, 0, sizeof(serverAddr));
@@ -43,28 +45,44 @@ int main(){
         exit(1);
     }
 
-    while(1){
-        bufferPointer = buffer;
-        maxBytesToRead = sizeof(buffer);
-        socketDescriptorReference = accept(socketDescriptor, &clientAddr, &clientAddressLength);
-        if(socketDescriptorReference < 0){
-            perror("Error: Accepting failed\n");
-            exit(1);
-        }
-        //printf("Im here\n");
-        bytesReceived = recv(socketDescriptorReference, bufferPointer, maxBytesToRead, 0);
-        while(bytesReceived > 0){
-            bufferPointer += bytesReceived;
-            maxBytesToRead -= bytesReceived;
-            bytesReceived = recv(socketDescriptorReference, bufferPointer, maxBytesToRead, 0);
+   printf("Enter while loop\n");
+   control = 1;
+   while(control){
+      bufferPointer = buffer;
+      maxBytesToRead = sizeof(buffer);
+      socketDescriptorReference = accept(socketDescriptor, &clientAddr, &clientAddressLength);
+      if(socketDescriptorReference < 0){
+	 perror("Error: Accepting failed\n");
+	 exit(1);
+      }
+      printf("Im here\n");
+      bytesReceived = recv(socketDescriptorReference, bufferPointer, maxBytesToRead, 0);
+      printf("Recieved: %d\n", bytesReceived);
+//      while(bytesReceived > 0){
+	 bufferPointer += bytesReceived;
+	 maxBytesToRead -= bytesReceived;
+//	 bytesReceived = recv(socketDescriptorReference, bufferPointer, maxBytesToRead, 0);
+//	 printf("Recieved: %d\n", bytesReceived);
+//      }
+      if(bytesReceived != 0)
+	{	   
+	   for(i = 0; i < sizeof(buffer) - maxBytesToRead; i++){
+	      printf("Index: %d Data: %c\n", i, buffer[i]);
+	   }
+	   printf("\n");
+	   data[0] = (char)i;
+	   send(socketDescriptorReference, data, 1, 0);
+	   printf("Data sent. Packet Count: %d\n", (char)i);
+	   sleep(1);
+	   close(socketDescriptorReference);
+	} else 
+	{
+	   control = 0;
 	}
-
-        for(i = 0; i < sizeof(buffer) - maxBytesToRead; i++){
-            printf("Index: %d Data: %c\n", i, buffer[i]);
-        }
-        printf("\n");
-        close(socketDescriptorReference);
-    }
-
+      
+      
+   }
+   close(socketDescriptor);
+   
 }
 
