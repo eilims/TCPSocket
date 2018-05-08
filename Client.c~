@@ -7,6 +7,7 @@
 int main(int argc, char** argv){
     int i;
     int control;
+    int stringIsValid;
     int socketDescriptor;
     int socketDescriptorReference;
     char data[100];
@@ -21,11 +22,27 @@ int main(int argc, char** argv){
 
     serverName = argv[1];
     control = 1; 
+    stringIsValid = 0;
     printf("Enter 0 as the first character to exit\n");
     while(control)
      {
+	stringIsValid = 0;
         printf("Please enter a string to transmit or 0 to exit: ");
 	fgets(data, 100, stdin);
+	while(!stringIsValid)
+	  {
+	     if((int)data[0] == 10)
+	       {
+		  printf("Please enter at least one character: ");
+		  fgets(data, 100, stdin);
+	       } else 
+	       {
+		  stringIsValid = 1;
+	       }
+	     
+	     
+	     
+	  }
 	memset(&serverAddr, 0, sizeof(serverAddr));
 	serverAddr.sin_family = AF_INET;
 	inet_pton(AF_INET, serverName,&serverAddr.sin_addr);
@@ -45,7 +62,7 @@ int main(int argc, char** argv){
 	if(data[0] != '0')
 	  {
 	     if(send(socketDescriptorReference, data, strlen(data) - 1, 0) < 0) printf("Error Sending\n");
-	     
+	     bufferPointer = buffer;
 	     bytesReceived = recv(socketDescriptorReference, bufferPointer, maxBytesToRead, 0);
 //	     while(bytesReceived > 0)
 //	       {
